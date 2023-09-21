@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const googleFile_1 = __importDefault(require("../controllers/googleFile"));
+const authFullUser_1 = __importDefault(require("../middleware/authFullUser"));
+const authStreamVideo_1 = __importDefault(require("../middleware/authStreamVideo"));
+const googleController = new googleFile_1.default();
+const router = express_1.Router();
+router.get("/file-service-google/list", authFullUser_1.default, googleController.getList);
+router.get("/file-service-google-mongo/list", authFullUser_1.default, googleController.getMongoGoogleList);
+router.get("/file-service-google/info/:id", authFullUser_1.default, googleController.getFileInfo);
+router.get("/file-service-google-mongo/quick-list", authFullUser_1.default, googleController.getGoogleMongoQuickList);
+router.get("/file-service-google-mongo/suggested-list", authFullUser_1.default, googleController.getGoogleMongoSuggestedList);
+router.patch("/file-service-google/rename", authFullUser_1.default, googleController.renameFile);
+router.delete("/file-service-google/remove", authFullUser_1.default, googleController.removeFile);
+router.get("/file-service-google/download/:id", authFullUser_1.default, googleController.downloadFile);
+router.get("/file-service-google-doc/download/:id", authFullUser_1.default, googleController.downloadDoc);
+router.get("/file-service-google/thumbnail/:id", authFullUser_1.default, googleController.getThumbnail);
+router.get("/file-service-google/full-thumbnail/:id", authFullUser_1.default, googleController.getFulllThumbnail);
+router.get("/file-service-google/stream-video/:id", authStreamVideo_1.default, googleController.streamVideo);
+router.post("/file-service-google/upload", authFullUser_1.default, googleController.uploadFile);
+router.patch("/file-service-google/move", authFullUser_1.default, googleController.moveFile);
+router.patch("/file-service-google/make-public/:id", authFullUser_1.default, googleController.makeFilePublic);
+router.delete("/file-service-google/remove-link/:id", authFullUser_1.default, googleController.removePublicLink);
+exports.default = router;

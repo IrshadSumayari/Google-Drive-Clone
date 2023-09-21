@@ -1,0 +1,28 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_1 = __importDefault(require("../middleware/auth"));
+const authNoEmailVerificication_1 = __importDefault(require("../middleware/authNoEmailVerificication"));
+const user_1 = __importDefault(require("../controllers/user"));
+const authRefresh_1 = __importDefault(require("../middleware/authRefresh"));
+const authLogout_1 = __importDefault(require("../middleware/authLogout"));
+const userController = new user_1.default();
+const router = express_1.Router();
+router.get("/user-service/user", authNoEmailVerificication_1.default, userController.getUser);
+router.patch("/user-service/refresh-storage-size", auth_1.default, userController.refreshStorageSize);
+router.get("/user-service/user-detailed", auth_1.default, userController.getUserDetailed);
+router.post("/user-service/login", userController.login);
+router.post("/user-service/logout", authLogout_1.default, userController.logout);
+router.post("/user-service/logout-all", authLogout_1.default, userController.logoutAll);
+router.post("/user-service/create", userController.createUser);
+router.post("/user-service/change-password", auth_1.default, userController.changePassword);
+router.post("/user-service/verify-email", userController.verifyEmail);
+router.post("/user-service/resend-verify-email", authNoEmailVerificication_1.default, userController.resendVerifyEmail);
+router.post("/user-service/send-password-reset", userController.sendPasswordReset);
+router.post("/user-service/reset-password", userController.resetPassword);
+router.patch("/user-service/add-name", auth_1.default, userController.addName);
+router.post("/user-service/get-token", authRefresh_1.default, userController.getToken);
+exports.default = router;

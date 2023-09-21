@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const auth_1 = __importDefault(require("../middleware/auth"));
+const personalFile_1 = __importDefault(require("../controllers/personalFile"));
+const authFullUser_1 = __importDefault(require("../middleware/authFullUser"));
+const authStreamVideo_1 = __importDefault(require("../middleware/authStreamVideo"));
+const personalFileController = new personalFile_1.default();
+const router = express_1.Router();
+router.post("/file-service-personal/upload", authFullUser_1.default, personalFileController.uploadPersonalFile);
+router.get("/file-service-personal/download/:id", authFullUser_1.default, personalFileController.downloadPersonalFile);
+router.get("/file-service-personal/thumbnail/:id", authFullUser_1.default, personalFileController.getPersonalThumbnail);
+router.get("/file-service-personal/full-thumbnail/:id", authFullUser_1.default, personalFileController.getFullPersonalThumbnail);
+router.get("/file-service-personal/stream-video/:id", authStreamVideo_1.default, personalFileController.streamPersonalVideo);
+router.get("/file-service-personal/public/download/:id/:tempToken", personalFileController.getPublicPersonalDownload);
+router.delete("/file-service-personal/remove", auth_1.default, personalFileController.deletePersonalFile);
+exports.default = router;
